@@ -1,7 +1,7 @@
 #!/bin/bash
 # This helper script downloads all the files for a year
 # It relies on aocd, which you can install with
-# uv tool install git+https://github.com/wimglenn/advent-of-code-data.git
+# uv tool install advent-of-code-data
 #
 #  export AOC_SESSION=xyz # (leading space so it's not added to history)
 # YEAR=20XX ./download.sh
