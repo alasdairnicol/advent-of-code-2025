@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import itertools
-from functools import cache
 
 
 def do_part_1(lines: list[str]) -> int:
@@ -10,19 +9,21 @@ def do_part_1(lines: list[str]) -> int:
     )
 
 
-@cache
-def max_joltage(number, length):
-    """
-    Recursively find the max joltage
-    """
-    if length == 0:
-        return ""
-    if len(number) == length:
-        return number
+def max_joltage(number: str, length: int):
+    result = ""
+    start = 0
 
-    n1 = number[0] + max_joltage(number[1:], length - 1)
-    n2 = max_joltage(number[1:], length)
-    return n1 if int(n1) > int(n2) else n2
+    for end in range(len(number) - length, len(number)):
+        # end is the final index that can be selected while
+        # still leaving enough digits afterwards
+
+        # find the index containing the max digit in s[start : end+1]
+        best_idx = max(range(start, end + 1), key=lambda i: number[i])
+
+        result += number[best_idx]
+        start = best_idx + 1
+
+    return int(result)
 
 
 def do_part_2(lines: list[str]) -> int:
