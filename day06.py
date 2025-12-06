@@ -2,7 +2,13 @@
 import functools
 import itertools
 import operator
-from typing import Any, Callable, Iterable
+from typing import Callable, Iterable
+
+# Type aliases
+Column = Iterable[int]
+IntOperator = Callable[[int, int], int]
+ColumnExtractor = Callable[[list[str]], Iterable[Column]]
+
 
 operators = {
     "+": operator.add,
@@ -10,21 +16,19 @@ operators = {
 }
 
 
-def digits_to_num(digits: list[int]) -> int:
+def digits_to_num(digits: Iterable[int]) -> int:
     return functools.reduce(lambda x, y: 10 * x + y, digits, 0)
 
 
-def calc_column(op: Callable[[Any, Any], Any], column: Iterable[int]):
+def calc_column(op: IntOperator, column: Column) -> int:
     return functools.reduce(op, column)
 
 
-def calc_columns(
-    ops: list[Callable[[Any, Any], Any]], columns: Iterable[Iterable[int]]
-):
+def calc_columns(ops: list[IntOperator], columns: Iterable[Column]) -> int:
     return sum(calc_column(op, column) for op, column in zip(ops, columns))
 
 
-def extract_columns_part_1(row_strings: list[str]) -> Iterable[Iterable[int]]:
+def extract_columns_part_1(row_strings: list[str]) -> Iterable[Column]:
     """
     Split rows on whitespace then transpose to get columns
     """
@@ -32,7 +36,7 @@ def extract_columns_part_1(row_strings: list[str]) -> Iterable[Iterable[int]]:
     return zip(*rows)
 
 
-def extract_columns_part_2(row_strings: list[str]) -> Iterable[Iterable[int]]:
+def extract_columns_part_2(row_strings: list[str]) -> Iterable[Column]:
     """
     Concat digits vertically. Groups are separated by a column of whitespace.
     """
@@ -49,9 +53,9 @@ def extract_columns_part_2(row_strings: list[str]) -> Iterable[Iterable[int]]:
 
 def solve(
     row_strings: list[str],
-    ops: list[Callable[[Any, Any], Any]],
-    extract_columns_function: Callable[[list[str]], Iterable[Iterable[int]]],
-):
+    ops: list[IntOperator],
+    extract_columns_function: Callable[[list[str]], Iterable[Column]],
+) -> int:
     columns = extract_columns_function(row_strings)
     return calc_columns(ops, columns)
 
