@@ -15,17 +15,19 @@ def in_range(ranges, ingredient):
 
 
 def merge_ranges(ranges):
-    out = []
-    while ranges:
-        r = ranges[0]
-        rest = ranges[1:]
-        ranges = []
-        for other in rest:
-            if other[0] <= r[1]:
-                r = (r[0], max(r[1], other[1]))
-            else:
-                ranges.append(other)
-        out.append(r)
+    if not ranges:
+        return []
+
+    out = [ranges[0]]
+    for r in ranges[1:]:
+        current = out[-1]
+        if current[1] + 1 >= r[0]:
+            # Merge overlapping or adjacent ranges (e.g. (2,4), (5,6))
+            out[-1] = (current[0], max(current[1], r[1]))
+        else:
+            # Add distinct range to end of output
+            out.append(r)
+
     return out
 
 
