@@ -2,7 +2,7 @@
 from typing import Any
 
 # Type aliases
-Grid = dict[tuple[int, int], Any]
+Grid = dict[tuple[int, int], str | int]
 
 
 def get_val(grid: Grid, i: int, j: int) -> str | int | None:
@@ -44,7 +44,9 @@ def do_part_1(grid: Grid, width: int, height: int) -> int:
 def do_part_2(grid: Grid, width: int, height: int) -> int:
     for j in range(1, height):
         for i in range(width):
-            grid[i, j] = get_val(grid, i, j)
+            val = get_val(grid, i, j)
+            if val is not None:
+                grid[i, j] = val
     return sum(grid.get((i, height - 1), 0) for i in range(width))
 
 
