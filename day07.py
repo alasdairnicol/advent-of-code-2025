@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from typing import Any
 
 # Type aliases
 Grid = dict[tuple[int, int], str | int]
@@ -9,17 +8,17 @@ def get_val(grid: Grid, i: int, j: int) -> str | int | None:
     current = grid.get((i, j))
     if current == "^":
         return current
-    val: str | int | None = 0
+    val: int = 0
     left = grid.get((i - 1, j))
     above_left = grid.get((i - 1, j - 1))
     above = grid.get((i, j - 1))
     right = grid.get((i + 1, j))
     above_right = grid.get((i + 1, j - 1))
     if above not in {"^", None}:
-        val = above if above != "|" else 1
-    if left == "^" and above_left:
+        val = above if above != "|" and isinstance(above, int) else 1
+    if left == "^" and above_left and isinstance(above_left, int):
         val += above_left
-    if right == "^" and above_right:
+    if right == "^" and above_right and isinstance(above_right, int):
         val += above_right
 
     return val
@@ -47,7 +46,7 @@ def do_part_2(grid: Grid, width: int, height: int) -> int:
             val = get_val(grid, i, j)
             if val is not None:
                 grid[i, j] = val
-    return sum(grid.get((i, height - 1), 0) for i in range(width))
+    return sum(int(grid.get((i, height - 1), 0)) for i in range(width))
 
 
 def main() -> None:
