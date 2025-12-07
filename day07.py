@@ -58,6 +58,8 @@ def main() -> None:
     part_1 = do_part_1(grid, width, height)
     print(f"{part_1=}")
 
+    # grid has been modified by part 1 but it seems to work ok because
+    # we'll overwrite the new "|"s on our second pass.
     part_2 = do_part_2(grid, width, height)
     print(f"{part_2=}")
 
